@@ -62,15 +62,15 @@ namespace sudoku {
         private bool ValidLocation(int row, int col, int num) =>
             SquareIsUnique(row, col, num) &&
             RowIsUnique(row, col, num) &&
-            CollumnIsUnique(row, col, num);
+            ColumnIsUnique(row, col, num);
 
         bool RowIsUnique(int row, int col, int num) =>
-            board.Skip(row * 9)
-                .Take(9)
+            board.Skip(row * Width)
+                .Take(Width)
                 .Where(x => x == this[row, col])
                 .Count() == 1;
 
-        bool CollumnIsUnique(int row, int col, int num) =>
+        bool ColumnIsUnique(int row, int col, int num) =>
             board.Where((_, i) => col % 9 == i % 9)
                 .Where(x => x == this[row, col])
                 .Count() == 1;
@@ -79,8 +79,8 @@ namespace sudoku {
         {
             var topLeftRow = (row / 3) * 3;
             var topLeftCol = (col / 3) * 3;
-            var h = idx / 9;
-            var w = idx % 9;
+            var h = idx / Height;
+            var w = idx % Width;
             return topLeftRow <= h
                 && h <= topLeftRow + 2
                 && topLeftCol <= w
@@ -93,12 +93,10 @@ namespace sudoku {
                 .Count()
                 .Equals(1);
 
-
-
         // Pretend a SudokuBoard is a 2d array.
         public int this[int row, int col] {
-            get => this.board[(row * 9) + col];
-            set => this.board[(row * 9) + col] = value;
+            get => this.board[(row * Width) + col];
+            set => this.board[(row * Width) + col] = value;
         }
 
         // Ugly, don't read.
